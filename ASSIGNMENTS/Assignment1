@@ -1,1 +1,25 @@
+// String Methods
+let str = "JavaScript is powerful!";
+console.log(str.length);               // Get string length
+console.log(str.toUpperCase());        // Convert to uppercase
+console.log(str.toLowerCase());        // Convert to lowercase
+console.log(str.includes("powerful")); // Check if it contains a word
+console.log(str.replace("powerful", "amazing")); // Replace a word
+console.log(str.split(" "));           // Split into an array
 
+// Array Methods
+let arr = ["Apple", "Banana", "Cherry", "Date"];
+console.log(arr.length);               // Get array length
+console.log(arr.push("Elderberry"));   // Add an element
+console.log(arr.pop());                // Remove last element
+console.log(arr.shift());              // Remove first element
+console.log(arr.unshift("Avocado"));   // Add element at the start
+console.log(arr.indexOf("Banana"));    // Find index
+console.log(arr.sort());               // Sort array
+console.log(arr.reverse());            // Reverse array
+
+// More  Array Methods
+let numbers = [1, 2, 3, 4, 5];
+console.log(numbers.map(num => num * 2));  // Multiply each by 2
+console.log(numbers.filter(num => num > 2)); // Filter greater than 2
+console.log(numbers.reduce((sum, num) => sum + num, 0)); // Sum all numbers
