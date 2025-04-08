@@ -1,1 +1,180 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  SectionList,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  Platform,
+} from 'react-native';
+
+const contacts = [
+  { name: 'Zarnab Imran', number: '03001234567', group: 'Family' },
+  { name: 'Mahaz', number: '03019876543', group: 'Friends' },
+  { name: 'Ahmed Bilal', number: '03219874321', group: 'Work' },
+  { name: 'Mahnoor Imran', number: '03451239876', group: 'Family' },
+  { name: 'Ammara', number: '03007654321', group: 'Friends' },
+  { name: 'Usman Haider', number: '03331239874', group: 'Work' },
+  { name: 'Qais Imran', number: '03121239874', group: 'Friends' },
+  { name: 'Sara Khan', number: '03012345678', group: 'Work' },
+  { name: 'Wasey Imran', number: '03451237890', group: 'Family' },
+  { name: 'Areeba Butt', number: '03109876543', group: 'Friends' },
+];
+
+export default function App() {
+  const [search, setSearch] = useState('');
+  const [selectedContact, setSelectedContact] = useState(null);
+
+  const filteredContacts = contacts.filter(
+    c =>
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.number.includes(search)
+  );
+
+  const groupedContacts = ['Family', 'Friends', 'Work'].map(group => ({
+    title: group,
+    data: filteredContacts.filter(c => c.group === group),
+  })).filter(section => section.data.length > 0);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>📱 Contact Manager</Text>
+      <TextInput
+        style={styles.searchBox}
+        placeholder="🔍 Search by name or number"
+        placeholderTextColor="#aaa"
+        value={search}
+        onChangeText={setSearch}
+      />
+
+      <SectionList
+        sections={groupedContacts}
+        keyExtractor={(item, index) => item.name + index}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.contactItem}
+            onPress={() => setSelectedContact(item)}
+          >
+            <Text style={styles.contactName}>{item.name}</Text>
+            <Text style={styles.contactNumber}>{item.number}</Text>
+          </TouchableOpacity>
+        )}
+        renderSectionHeader={({ section: { title } }) => (
+          <Text style={styles.groupTitle}>{title}</Text>
+        )}
+      />
+
+      <Modal
+        visible={!!selectedContact}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setSelectedContact(null)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>👤 Contact Details</Text>
+            {selectedContact && (
+              <>
+                <Text style={styles.detailText}>Name: {selectedContact.name}</Text>
+                <Text style={styles.detailText}>Number: {selectedContact.number}</Text>
+                <Text style={styles.detailText}>Group: {selectedContact.group}</Text>
+              </>
+            )}
+            <TouchableOpacity onPress={() => setSelectedContact(null)}>
+              <Text style={styles.closeBtn}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, paddingTop: 50, backgroundColor: '#f5f7fa' },
+  header: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#2e86de',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  searchBox: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginBottom: 10,
+    fontSize: 16,
+  },
+  groupTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    backgroundColor: '#dff9fb',
+    color: '#130f40',
+    padding: 8,
+    borderRadius: 6,
+    marginTop: 12,
+  },
+  contactItem: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
+  },
+  contactName: {
+    fontSize: 17,
+    fontWeight: '500',
+    color: '#2f3542',
+  },
+  contactNumber: {
+    fontSize: 14,
+    color: '#636e72',
+    marginTop: 4,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: '#00000088',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '85%',
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#0984e3',
+    marginBottom: 15,
+  },
+  detailText: {
+    fontSize: 16,
+    color: '#2d3436',
+    marginVertical: 3,
+  },
+  closeBtn: {
+    marginTop: 15,
+    color: '#0984e3',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});
 
